@@ -22,6 +22,25 @@ footer {
   font-weight: bolder;
 }
 
+.image {
+  background-image: url(./image/9.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.image img {
+  opacity: 0;
+  width: 200px;
+  height: 200px;
+}
+
+.image.flip {
+  background-image: none;
+}
+
+.image.flip img {
+  opacity: 1;
+}
 
 .image__container {
   display: grid;
@@ -43,25 +62,6 @@ footer {
   height: 800px;
 }
 
-.image {
-  background-image: url(./image/9.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.image img {
-  opacity: 0;
-  width: 200px;
-  height: 200px;
-}
-
-.image.flip {
-  background-image: none;
-}
-
-.image.flip img {
-  opacity: 1;
-}
 
 .start__button {
   margin: 0px;
@@ -112,6 +112,7 @@ footer {
   z-index: -1;
 }
 .result__text {
+  text-align: center;
   font-size: 40px;
 }
 

@@ -9,7 +9,7 @@ const resultTextElement = document.querySelector(".result__text")
 let score = 0;
 let leftTarget = 8;
 let imageboxElement = [];
-let genNum = [];
+let randomNumber = [];
 let timer = null;
 let firstPick = null;
 let firstPickImageElement = null;
@@ -38,7 +38,7 @@ function createImagebox() {
   for (let i = 0; i < imageList.length; i++) {
     const createImagebox = document.createElement("div");
     imageContainer.prepend(createImagebox);
-    createImagebox.innerHTML = `<img src=${imageList[genNum.pop()]}></img>`;
+    createImagebox.innerHTML = `<img src=${imageList[randomNumber.pop()]}></img>`;
     createImagebox.dataset.index = i;
     createImagebox.className = "image";
   }
@@ -55,7 +55,10 @@ function handleClickImage() {
   if (firstPick === null) {
     firstPick = this
     firstPickImageElement = this.innerHTML
-  } else if (secondPick === null) {
+    return
+  }
+
+  if (secondPick === null) {
     secondPick = this
     secondPickImageElement = this.innerHTML
   }
@@ -73,16 +76,16 @@ function generateRandomNumber() {
   while (i < imageList.length) {
     let Num = Math.floor(Math.random() * imageList.length);
     if (!hasSameNumber(Num)) {
-      genNum.push(Num);
+      randomNumber.push(Num);
       i++;
     }
   }
-  return genNum
+  return randomNumber
 }
 
 function hasSameNumber(Num) {
-  for (var i = 0 ; i < genNum.length; i++) {
-    if (Num === genNum[i]) return true;
+  for (var i = 0 ; i < randomNumber.length; i++) {
+    if (Num === randomNumber[i]) return true;
   }
 }
 
@@ -124,7 +127,7 @@ function resetPick() {
   secondPickImageElement = null;
 }
 
-function countdownTimer(secondsLeft = 5) {
+function countdownTimer(secondsLeft = 60) {
   clearInterval(timer);
   displayTimeLeft(secondsLeft)
   timer = setInterval(() => {
@@ -147,13 +150,12 @@ function showLoseResult() {
   restartBtnElement.classList.add("restart__button--show")
   imageContainer.textContent = "";
   resultTextElement.textContent = `모코코를 다 찾지 못하셨습니다 😢. 찾으신 모코코는 ${score}개 입니다.`;
-  //resultTextElement.className = "result__text--show"
 }
 
 function showWinResult() {
   clearInterval(timer);
+  imageContainer.textContent = "";
   resultTextElement.textContent = `모든 모코코를 다 찾으셨습니다!!`;
-  //resultTextElement.className = "result__text--show"
 }
 
 function handleClickRestartBtn() {
