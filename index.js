@@ -10,7 +10,7 @@ let score = 0;
 let leftTarget = 8;
 let imageboxElement = [];
 let randomNumber = [];
-let timer = null;
+let timerId = null;
 let firstPick = null;
 let firstPickImageElement = null;
 let secondPick = null;
@@ -27,13 +27,13 @@ const imageList = [
   "./image/8.PNG", "./image/8.PNG",
 ];
 
-function createImagebox() {
-  startBtnElement.classList.add("start__button--hidden")
-  countdownTimer()
+function handleClickStart() {
+  startBtnElement.classList.add("start__button--hidden");
+  countdownTimer();
   imageContainer.textContent = "";
   generateRandomNumber();
-  gameScoreElement.textContent = `찾은 모코코 : ${score} / 8`
-  gameTargetElement.textContent = `남은 모코코 : ${leftTarget} / 8`
+  gameScoreElement.textContent = `찾은 모코코 : ${score} / 8`;
+  gameTargetElement.textContent = `남은 모코코 : ${leftTarget} / 8`;
 
   for (let i = 0; i < imageList.length; i++) {
     const createImagebox = document.createElement("div");
@@ -45,25 +45,24 @@ function createImagebox() {
 
   imageboxElement = document.querySelectorAll(".image");
   imageboxElement.forEach((image) =>
-  image.addEventListener("click", handleClickImage)
-  )
+  image.addEventListener("click", handleClickImage));
 }
 
 function handleClickImage() {
-  this.classList.add("flip")
+  this.classList.add("flip");
 
   if (firstPick === null) {
-    firstPick = this
-    firstPickImageElement = this.innerHTML
+    firstPick = this;
+    firstPickImageElement = this.innerHTML;
     return
   }
 
   if (secondPick === null) {
-    secondPick = this
-    secondPickImageElement = this.innerHTML
+    secondPick = this;
+    secondPickImageElement = this.innerHTML;
   }
 
-  const isSameImage = (firstPickImageElement === secondPickImageElement && firstPick !== secondPick)
+  const isSameImage = (firstPickImageElement === secondPickImageElement && firstPick !== secondPick);
   if (isSameImage) {
     matchImage();
   } else {
@@ -92,11 +91,11 @@ function hasSameNumber(Num) {
 function matchImage() {
   score += 1;
   leftTarget -= 1;
-  firstPick.removeEventListener("click", handleClickImage)
-  secondPick.removeEventListener("click", handleClickImage)
-  resetPick()
-  gameScoreElement.textContent = `찾은 모코코 : ${score} / 8`
-  gameTargetElement.textContent = `남은 모코코 : ${leftTarget} / 8`
+  firstPick.removeEventListener("click", handleClickImage);
+  secondPick.removeEventListener("click", handleClickImage);
+  resetPick();
+  gameScoreElement.textContent = `찾은 모코코 : ${score} / 8`;
+  gameTargetElement.textContent = `남은 모코코 : ${leftTarget} / 8`;
 
   if (score === 8) {
     showWinResult();
@@ -108,15 +107,15 @@ function missMatchImage() {
   const isNotEmpty = firstPickImageElement !== null && secondPickImageElement !== null
   if (isNotEmpty) {
     imageboxElement.forEach((image) =>
-    image.removeEventListener("click", handleClickImage))
+    image.removeEventListener("click", handleClickImage));
 
     setTimeout(() => {
-      firstPick.classList.remove("flip")
-      secondPick.classList.remove("flip")
-      resetPick()
+      firstPick.classList.remove("flip");
+      secondPick.classList.remove("flip");
+      resetPick();
       imageboxElement.forEach((image) =>
-      image.addEventListener("click", handleClickImage))
-    }, 300)
+      image.addEventListener("click", handleClickImage));
+    }, 300);
   }
 }
 
@@ -128,14 +127,14 @@ function resetPick() {
 }
 
 function countdownTimer(secondsLeft = 60) {
-  clearInterval(timer);
-  displayTimeLeft(secondsLeft)
-  timer = setInterval(() => {
+  clearInterval(timerId);
+  displayTimeLeft(secondsLeft);
+  timerId = setInterval(() => {
     secondsLeft -= 1;
     if (secondsLeft === 0) {
-      displayTimeLeft(secondsLeft)
-      clearInterval(timer);
-      showLoseResult()
+      displayTimeLeft(secondsLeft);
+      clearInterval(timerId);
+      showLoseResult();
       return
     }
     displayTimeLeft(secondsLeft);
@@ -143,17 +142,17 @@ function countdownTimer(secondsLeft = 60) {
 }
 
 function displayTimeLeft(secondsLeft) {
-  gameTimerTextElement.textContent = `00 : ${secondsLeft < 10 ? 0 : ""}${secondsLeft}`
+  gameTimerTextElement.textContent = `00 : ${secondsLeft < 10 ? 0 : ""}${secondsLeft}`;
 }
 
 function showLoseResult() {
-  restartBtnElement.classList.add("restart__button--show")
+  restartBtnElement.classList.add("restart__button--show");
   imageContainer.textContent = "";
   resultTextElement.textContent = `모코코를 다 찾지 못하셨습니다 😢. 찾으신 모코코는 ${score}개 입니다.`;
 }
 
 function showWinResult() {
-  clearInterval(timer);
+  clearInterval(timerId);
   imageContainer.textContent = "";
   resultTextElement.textContent = `모든 모코코를 다 찾으셨습니다!!`;
 }
@@ -161,7 +160,7 @@ function showWinResult() {
 function handleClickRestartBtn() {
   score = 0;
   leftTarget = 8;
-  clearInterval(timer);
+  clearInterval(timerId);
   resetGameElements()
   startBtnElement.classList.remove("start__button--hidden");
   restartBtnElement.classList.remove("restart__button--show");
@@ -175,8 +174,8 @@ function resetGameElements() {
   imageContainer.innerHTML = `<img class="image__container--start-image" src="./image/startimage.png">`;
 }
 
-startBtnElement.addEventListener("click", createImagebox);
-restartBtnElement.addEventListener("click", handleClickRestartBtn)
+startBtnElement.addEventListener("click", handleClickStart);
+restartBtnElement.addEventListener("click", handleClickRestartBtn);
 
 
 // 다르면 classlist 에서 show 함수 삭제하고 이전 백그라운드 이미지로 돌아가기
