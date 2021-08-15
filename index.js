@@ -4,7 +4,9 @@ const imageContainer = document.querySelector(".image__container");
 const gameTimerTextElement = document.querySelector(".game-timer");
 const gameScoreElement = document.querySelector(".game-score");
 const gameTargetElement = document.querySelector(".game-target");
-const resultTextElement = document.querySelector(".result__text")
+const resultTextElement = document.querySelector(".result__text");
+const correctSoundElement = document.querySelector(".match-right");
+const winSoundElement = document.querySelector(".win-sound");
 
 let score = 0;
 let leftTarget = 8;
@@ -91,6 +93,8 @@ function hasSameNumber(Num) {
 function matchImage() {
   score += 1;
   leftTarget -= 1;
+  correctSoundElement.currentTime = 0
+  correctSoundElement.play()
   firstPick.removeEventListener("click", handleClickImage);
   secondPick.removeEventListener("click", handleClickImage);
   resetPick();
@@ -153,6 +157,9 @@ function showLoseResult() {
 
 function showWinResult() {
   clearInterval(timerId);
+  correctSoundElement.currentTime = 0;
+  winSoundElement.currentTime = 0;
+  winSoundElement.play()
   imageContainer.textContent = "";
   resultTextElement.textContent = `모든 모코코를 다 찾으셨습니다!!`;
 }
