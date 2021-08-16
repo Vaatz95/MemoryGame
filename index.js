@@ -110,15 +110,15 @@ function matchImage() {
 function missMatchImage() {
   const isNotEmpty = firstPickImageElement !== null && secondPickImageElement !== null
   if (isNotEmpty) {
-    imageboxElement.forEach((image) =>
-    image.removeEventListener("click", handleClickImage));
+   // imageboxElement.forEach((image) =>
+   // image.removeEventListener("click", handleClickImage));
 
     setTimeout(() => {
       firstPick.classList.remove("flip");
       secondPick.classList.remove("flip");
       resetPick();
-      imageboxElement.forEach((image) =>
-      image.addEventListener("click", handleClickImage));
+    //  imageboxElement.forEach((image) =>
+    //  image.addEventListener("click", handleClickImage));
     }, 300);
   }
 }
