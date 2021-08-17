@@ -110,15 +110,10 @@ function matchImage() {
 function missMatchImage() {
   const isNotEmpty = firstPickImageElement !== null && secondPickImageElement !== null
   if (isNotEmpty) {
-   // imageboxElement.forEach((image) =>
-   // image.removeEventListener("click", handleClickImage));
-
     setTimeout(() => {
       firstPick.classList.remove("flip");
       secondPick.classList.remove("flip");
       resetPick();
-    //  imageboxElement.forEach((image) =>
-    //  image.addEventListener("click", handleClickImage));
     }, 300);
   }
 }
@@ -183,13 +178,3 @@ function resetGameElements() {
 
 startBtnElement.addEventListener("click", handleClickStart);
 restartBtnElement.addEventListener("click", handleClickRestartBtn);
-
-
-// 다르면 classlist 에서 show 함수 삭제하고 이전 백그라운드 이미지로 돌아가기
-// while 문을 활용해서 숫자를 만들어내고 그 숫자를 집어넣은 배열을 만들어주고 그 배열안에 숫자를 빼서 넣어주는 방식으로 해결한다.
-// genNum 함수에서 최소 0 , 최대 15로 하고 16번 시행하게 하고 중복일 경우 다시 돌리는 방식으로 0 ~ 15 까지 무작위 순서로 숫자를 만들어 [ ]에 집어넣는다.
-// ex) imageList(genNum.pop)
-// reset 버튼을 누르면 새로고침으로 재시작 하는 것이 아닌 다른 방식으로 재시작 하는 걸로 구현해야함 (아마 기존에 있던 부분을 DOM으로 삭제하고 다시 DOM 요소들을 재생성 해주는 방식을 구현 해주면 될거 같음)
-// score = 8 이면 승리 했다는걸 알리면서 restart 버튼이 나오고 기존에 있던 부분이 사라지고 승리를 축하해야함
-
-
