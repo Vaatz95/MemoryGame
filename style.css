@@ -42,6 +42,10 @@ footer {
   opacity: 1;
 }
 
+.image__container.unclickable {
+  pointer-events: none;
+}
+
 .image__container {
   display: grid;
   background-image: url("");

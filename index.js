@@ -134,10 +134,12 @@ function matchImage() {
 function missMatchImage() {
   const isNotEmpty = firstPickImageElement !== null && secondPickImageElement !== null
   if (isNotEmpty) {
+    imageContainer.classList.add("unclickable")
     setTimeout(() => {
       firstPick.classList.remove("flip");
       secondPick.classList.remove("flip");
       resetPick();
+      imageContainer.classList.remove("unclickable")
     }, 300);
   }
 }
