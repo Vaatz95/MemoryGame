@@ -34,9 +34,12 @@ function handleClickStart() {
   countdownTimer();
   imageContainer.textContent = "";
   generateRandomNumber();
+  shuffleImage()
   gameScoreElement.textContent = `찾은 모코코 : ${score} / 8`;
   gameTargetElement.textContent = `남은 모코코 : ${leftTarget} / 8`;
+}
 
+function shuffleImage() {
   for (let i = 0; i < imageList.length; i++) {
     const createImagebox = document.createElement("div");
     imageContainer.prepend(createImagebox);
