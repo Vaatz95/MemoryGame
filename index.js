@@ -7,6 +7,7 @@ const gameTargetElement = document.querySelector(".game-target");
 const resultTextElement = document.querySelector(".result__text");
 const correctSoundElement = document.querySelector(".match-right");
 const winSoundElement = document.querySelector(".win-sound");
+const backgroundMusicElement = document.querySelector(".background-music");
 
 let score = 0;
 let leftTarget = 8;
@@ -17,8 +18,9 @@ let firstPick = null;
 let firstPickImageElement = null;
 let secondPick = null;
 let secondPickImageElement = null;
+let isPlaying = false
 
-const imageList = [
+const IMAGE_LIST = [
   "./image/1.PNG", "./image/1.PNG",
   "./image/2.PNG", "./image/2.PNG",
   "./image/3.PNG", "./image/3.PNG",
@@ -29,21 +31,41 @@ const imageList = [
   "./image/8.PNG", "./image/8.PNG",
 ];
 
+const GAME_SOUND = {
+  correctSound: new Audio('./sound/모코코뽑는소리.mp3'),
+  winResult: new Audio('./sound/승리.mp3'),
+  backgroundMusic: new Audio('./sound/background.mp3'),
+};
+
+const controlSound = {
+  play: function (audio) {
+    audio.currentTime = 0;
+    audio === GAME_SOUND.backgroundMusic ? audio.volume = 0.5 : audio.volume = 1
+    isPlaying ? audio.play() : audio.pause()
+  },
+  result: function (audio) {
+    audio.currentTime = 0;
+    isPlaying ? audio.pause() : audio.play()
+  }
+};
+
 function handleClickStart() {
+  isPlaying = true
   startBtnElement.classList.add("start__button--hidden");
   countdownTimer();
   imageContainer.textContent = "";
   generateRandomNumber();
   shuffleImage()
+  controlSound.play(GAME_SOUND.backgroundMusic)
   gameScoreElement.textContent = `찾은 모코코 : ${score} / 8`;
   gameTargetElement.textContent = `남은 모코코 : ${leftTarget} / 8`;
 }
 
 function shuffleImage() {
-  for (let i = 0; i < imageList.length; i++) {
+  for (let i = 0; i < IMAGE_LIST.length; i++) {
     const createImagebox = document.createElement("div");
     imageContainer.prepend(createImagebox);
-    createImagebox.innerHTML = `<img src=${imageList[randomNumber.pop()]}></img>`;
+    createImagebox.innerHTML = `<img src=${IMAGE_LIST[randomNumber.pop()]}></img>`;
     createImagebox.dataset.index = i;
     createImagebox.className = "image";
   }
@@ -77,8 +99,8 @@ function handleClickImage() {
 
 function generateRandomNumber() {
   let i= 0;
-  while (i < imageList.length) {
-    let Num = Math.floor(Math.random() * imageList.length);
+  while (i < IMAGE_LIST.length) {
+    let Num = Math.floor(Math.random() * IMAGE_LIST.length);
     if (!hasSameNumber(Num)) {
       randomNumber.push(Num);
       i++;
@@ -96,8 +118,7 @@ function hasSameNumber(Num) {
 function matchImage() {
   score += 1;
   leftTarget -= 1;
-  correctSoundElement.currentTime = 0
-  correctSoundElement.play()
+  controlSound.play(GAME_SOUND.correctSound)
   firstPick.removeEventListener("click", handleClickImage);
   secondPick.removeEventListener("click", handleClickImage);
   resetPick();
@@ -148,16 +169,18 @@ function displayTimeLeft(secondsLeft) {
 }
 
 function showLoseResult() {
+  isPlaying = false
+  controlSound.play(GAME_SOUND.backgroundMusic);
   restartBtnElement.classList.add("restart__button--show");
   imageContainer.textContent = "";
   resultTextElement.textContent = `모코코를 다 찾지 못하셨습니다 😢. 찾으신 모코코는 ${score}개 입니다.`;
 }
 
 function showWinResult() {
+  isPlaying = false
   clearInterval(timerId);
-  correctSoundElement.currentTime = 0;
-  winSoundElement.currentTime = 0;
-  winSoundElement.play()
+  controlSound.result(GAME_SOUND.winResult);
+  controlSound.play(GAME_SOUND.backgroundMusic);
   imageContainer.textContent = "";
   resultTextElement.textContent = `모든 모코코를 다 찾으셨습니다!!`;
 }
