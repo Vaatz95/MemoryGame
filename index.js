@@ -5,9 +5,6 @@ const gameTimerTextElement = document.querySelector(".game-timer");
 const gameScoreElement = document.querySelector(".game-score");
 const gameTargetElement = document.querySelector(".game-target");
 const resultTextElement = document.querySelector(".result__text");
-const correctSoundElement = document.querySelector(".match-right");
-const winSoundElement = document.querySelector(".win-sound");
-const backgroundMusicElement = document.querySelector(".background-music");
 
 let score = 0;
 let leftTarget = 8;
