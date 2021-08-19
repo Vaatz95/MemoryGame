@@ -6,17 +6,6 @@ const gameScoreElement = document.querySelector(".game-score");
 const gameTargetElement = document.querySelector(".game-target");
 const resultTextElement = document.querySelector(".result__text");
 
-let score = 0;
-let leftTarget = 8;
-let imageboxElement = [];
-let randomNumber = [];
-let timerId = null;
-let firstPick = null;
-let firstPickImageElement = null;
-let secondPick = null;
-let secondPickImageElement = null;
-let isPlaying = false
-
 const IMAGE_LIST = [
   "./image/1.PNG", "./image/1.PNG",
   "./image/2.PNG", "./image/2.PNG",
@@ -34,6 +23,13 @@ const GAME_SOUND = {
   backgroundMusic: new Audio('./sound/background.mp3'),
 };
 
+const GAME_UI = [
+  gameScoreElement,
+  gameTargetElement,
+  gameTimerTextElement,
+  resultTextElement,
+];
+
 const controlSound = {
   play: function (audio) {
     audio.currentTime = 0;
@@ -46,7 +42,25 @@ const controlSound = {
   }
 };
 
-function handleClickStart() {
+const resetGame = {
+  reset: function(el) {
+    el.forEach((el) => el.textContent = "");
+    imageContainer.innerHTML = `<img class="image__container--start-image" src="./image/startimage.png">`;
+  }
+};
+
+let score = 0;
+let leftTarget = 8;
+let imageboxElement = [];
+let randomNumber = [];
+let timerId = null;
+let firstPick = null;
+let firstPickImageElement = null;
+let secondPick = null;
+let secondPickImageElement = null;
+let isPlaying = false
+
+function handleClickStartBtn() {
   isPlaying = true
   startBtnElement.classList.add("start__button--hidden");
   countdownTimer();
@@ -86,6 +100,10 @@ function handleClickImage() {
     secondPickImageElement = this.innerHTML;
   }
 
+  compareImageCouple()
+}
+
+function compareImageCouple() {
   const isSameImage = (firstPickImageElement === secondPickImageElement && firstPick !== secondPick);
   if (isSameImage) {
     matchImage();
@@ -188,18 +206,10 @@ function handleClickRestartBtn() {
   score = 0;
   leftTarget = 8;
   clearInterval(timerId);
-  resetGameElements()
+  resetGame.reset(GAME_UI);
   startBtnElement.classList.remove("start__button--hidden");
   restartBtnElement.classList.remove("restart__button--show");
 }
 
-function resetGameElements() {
-  gameScoreElement.textContent = "";
-  gameTargetElement.textContent = "";
-  gameTimerTextElement.textContent = "";
-  resultTextElement.textContent = "";
-  imageContainer.innerHTML = `<img class="image__container--start-image" src="./image/startimage.png">`;
-}
-
-startBtnElement.addEventListener("click", handleClickStart);
+startBtnElement.addEventListener("click", handleClickStartBtn);
 restartBtnElement.addEventListener("click", handleClickRestartBtn);
