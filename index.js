@@ -43,14 +43,12 @@ const controlSound = {
 };
 
 const resetGame = {
-  reset: function(el) {
+  resetElement: function(el) {
     el.forEach((el) => el.textContent = "");
     imageContainer.innerHTML = `<img class="image__container--start-image" src="./image/startimage.png">`;
   }
 };
 
-let score = 0;
-let leftTarget = 8;
 let imageboxElement = [];
 let randomNumber = [];
 let timerId = null;
@@ -58,10 +56,26 @@ let firstPick = null;
 let firstPickImageElement = null;
 let secondPick = null;
 let secondPickImageElement = null;
-let isPlaying = false
+let isPlaying = false;
+let isStart = false;
+
+const countScore = (function () {
+  let score = 0
+  return function () {
+    return isStart ? score : score += 1
+  };
+}());
+
+const countQuestion = (function () {
+  let leftTarget = 8
+  return function () {
+    return isStart ? leftTarget : leftTarget -= 1
+  };
+}());
 
 function handleClickStartBtn() {
-  isPlaying = true
+  isPlaying = true;
+  isStart = true;
   startBtnElement.classList.add("start__button--hidden");
   countdownTimer();
   imageContainer.textContent = "";
@@ -87,6 +101,7 @@ function shuffleImage() {
 }
 
 function handleClickImage() {
+  isStart = false;
   this.classList.add("flip");
 
   if (firstPick === null) {
@@ -104,11 +119,13 @@ function handleClickImage() {
 }
 
 function compareImageCouple() {
-  const isSameImage = (firstPickImageElement === secondPickImageElement && firstPick !== secondPick);
-  if (isSameImage) {
-    matchImage();
-  } else {
-    missMatchImage();
+  const isSameImage = (firstPickImageElement === secondPickImageElement)
+  if(firstPick !== secondPick){
+    if (isSameImage) {
+      matchImage();
+    } else {
+      missMatchImage();
+    }
   }
 }
 
@@ -131,8 +148,8 @@ function hasSameNumber(Num) {
 }
 
 function matchImage() {
-  score += 1;
-  leftTarget -= 1;
+  let score = countScore()
+  let leftTarget =countQuestion()
   controlSound.play(GAME_SOUND.correctSound)
   firstPick.removeEventListener("click", handleClickImage);
   secondPick.removeEventListener("click", handleClickImage);
@@ -166,7 +183,7 @@ function resetPick() {
   secondPickImageElement = null;
 }
 
-function countdownTimer(secondsLeft = 60) {
+function countdownTimer(secondsLeft = 10) {
   clearInterval(timerId);
   displayTimeLeft(secondsLeft);
   timerId = setInterval(() => {
@@ -186,7 +203,9 @@ function displayTimeLeft(secondsLeft) {
 }
 
 function showLoseResult() {
-  isPlaying = false
+  isStart = true;
+  isPlaying = false;
+  let score = countScore()
   controlSound.play(GAME_SOUND.backgroundMusic);
   restartBtnElement.classList.add("restart__button--show");
   imageContainer.textContent = "";
@@ -203,10 +222,8 @@ function showWinResult() {
 }
 
 function handleClickRestartBtn() {
-  score = 0;
-  leftTarget = 8;
   clearInterval(timerId);
-  resetGame.reset(GAME_UI);
+  resetGame.resetElement(GAME_UI);
   startBtnElement.classList.remove("start__button--hidden");
   restartBtnElement.classList.remove("restart__button--show");
 }
