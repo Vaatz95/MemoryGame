@@ -76,6 +76,8 @@ const countQuestion = (function () {
 function handleClickStartBtn() {
   isPlaying = true;
   isStart = true;
+  const score = countScore()
+  const leftTarget =countQuestion()
   startBtnElement.classList.add("start__button--hidden");
   countdownTimer();
   imageContainer.textContent = "";
@@ -148,8 +150,8 @@ function hasSameNumber(Num) {
 }
 
 function matchImage() {
-  let score = countScore()
-  let leftTarget =countQuestion()
+  const score = countScore()
+  const leftTarget =countQuestion()
   controlSound.play(GAME_SOUND.correctSound)
   firstPick.removeEventListener("click", handleClickImage);
   secondPick.removeEventListener("click", handleClickImage);
@@ -183,7 +185,7 @@ function resetPick() {
   secondPickImageElement = null;
 }
 
-function countdownTimer(secondsLeft = 10) {
+function countdownTimer(secondsLeft = 60) {
   clearInterval(timerId);
   displayTimeLeft(secondsLeft);
   timerId = setInterval(() => {
